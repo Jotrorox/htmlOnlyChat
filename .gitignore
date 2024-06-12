@@ -1,7 +1,1 @@
-/node_modules
-/package-lock.json
-
-# Added by cargo
-
-/target
-Cargo.lock
+index.html
