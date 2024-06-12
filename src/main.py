@@ -4,26 +4,25 @@ from PIL import Image, ImageDraw, ImageFont
 import io
 import os
 import re
+from  sqlite4  import  SQLite4
 
 app = Flask(__name__)
 
-messages = {}
+database = SQLite4("database.db")
+
+def setupDB():
+  database.connect()
+  database.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, message TEXT)")
 
 @app.route('/chat', methods=['POST'])
 def post_chat():
     name = request.form['name']
     message = request.form['message']
 
-    # Remove HTML tags
     message = re.sub('<[^<]+?>', '', message)
-
-    # Remove SQL statements
     message = re.sub(r'\b(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP)\b', '', message)
 
-    if name in messages:
-      messages[name].append(message)
-    else:
-      messages[name] = [message]
+    database.execute("INSERT INTO users (username, message) VALUES (?, ?)", (name, message))
 
     print(f"Name: {name}, message: {message}")
     return """
@@ -44,9 +43,11 @@ def post_chat():
 @app.route('/chat')
 def get_chat():
     chat_history = ''
-    for name, messages_array in messages.items():
-        for message in messages_array:
-            chat_history += f'<p>{name}: {message}</p>'
+    rows = database.execute("SELECT username, message FROM users")
+    for row in rows:
+      name = row[0]
+      message = row[1]
+      chat_history += f'<p>{name}: {message}</p>'
     return """
     <html>
       <head>
@@ -64,6 +65,7 @@ def get_chat():
     """.format(chat_history)
 
 if __name__ == '__main__':
+  setupDB()
   port = os.environ.get('PORT')
   if port:
     serve(app, host='0.0.0.0', port=int(port))
