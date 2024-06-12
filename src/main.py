@@ -36,7 +36,6 @@ def get_chat():
     for name, messages_array in messages.items():
         for message in messages_array:
             chat_history += f'<p>{name}: {message}</p>'
-    print(chat_history)
     return """
     <html>
       <head>
