@@ -58,9 +58,6 @@ function getLastMessages(num_messages, callback) {
             console.error("Error fetching messages:", err.message);
             callback(null);
         } else {
-            if (rows.length === 0) {
-                console.log("No messages found in the database.");
-            }
             callback(rows);
         }
     });
@@ -129,6 +126,24 @@ app.get('/chat', (req, res) => {
 
 app.get('/last-messages-img', (_, res) => {
     getLastMessages(5, (messages) => {
+        if (messages.length === 0) {
+            const errSvg = `
+                <svg width="400" height="100" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100%" height="100%" fill="none" />
+                    <text x="10" y="20" font-family="Arial" font-size="16" fill="black">No messages found</text>
+                </svg>
+            `;
+            sharp(Buffer.from(errSvg))
+                .toFormat('png')
+                .toBuffer()
+                .then(data => {
+                    res.type('png');
+                    res.end(data, 'binary');
+                }
+            );
+            return;
+        }
+
         let svg = messages.map((message, index) => {
             return `
                 <text x="10" y="${(index * 20)+20}" font-family="Arial" font-size="16" fill="black">${message.name}: ${message.message}</text>
