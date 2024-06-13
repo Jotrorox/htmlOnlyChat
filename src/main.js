@@ -33,7 +33,6 @@ function insertMessage(name, message) {
     const sqlInsert = 'INSERT INTO messages (name, message) VALUES (?, ?)';
     db.run(sqlInsert, [name, message], (err) => {
         if (err) console.error(err.message);
-        console.log('Inserted message into the database.');
     });
 }
 
