@@ -39,11 +39,18 @@ function insertMessage(name, message) {
 function getMessages(callback) {
     const sqlSelect = 'SELECT * FROM messages';
     db.all(sqlSelect, (err, rows) => {
-        if (err) console.error(err.message);
-        callback(rows);
+        if (err) {
+            console.error("Error fetching messages:", err.message);
+            callback(null);
+        } else {
+            console.log(`Fetched ${rows.length} messages.`);
+            if (rows.length === 0) {
+                console.log("No messages found in the database.");
+            }
+            callback(rows);
+        }
     });
 }
-
 
 /**
  * Sanitizes a string by replacing '<' and '>' characters with their HTML entity equivalents.
@@ -79,33 +86,32 @@ app.post('/chat', upload.none(),  (req, res) => {
 });
 
 app.get('/chat', (req, res) => {
-    let html = '';
     getMessages((messages) => {
-        html = messages.map((message) => {
+        let html = messages.map((message) => {
+            console.log(message);
             return `
                 <div>
-                    <h3>${message.name}</h3>
-                    <p>${message.message}</p>
+                    <p><strong>${message.name}</strong>: ${message.message}</p>
                 </div>
             `;
         }).join('');
-    });
 
-    res.send(`
-        <html>
-          <head>
-            <script>
-              setInterval(function() {
-                location.reload();
-              }, 1000);
-            </script>
-          </head>
-          <body>
-            <h1>Chat History</h1>
-            ${html}
-          </body>
-        </html>
-      `);
+        res.send(`
+            <html>
+              <head>
+                <script>
+                  setInterval(function() {
+                    location.reload();
+                  }, 1000);
+                </script>
+              </head>
+              <body>
+                <h1>Chat History</h1>
+                ${html}
+              </body>
+            </html>
+          `);
+    });
 });
 
 const PORT = process.env.PORT || 3000;
