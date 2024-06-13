@@ -12,7 +12,7 @@ database = SQLite4("database.db")
 
 def setupDB():
   database.connect()
-  database.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, message TEXT)")
+  database.create_table("messages", ["username", "message"])
 
 @app.route('/chat', methods=['POST'])
 def post_chat():
@@ -22,8 +22,8 @@ def post_chat():
     message = re.sub('<[^<]+?>', '', message)
     message = re.sub(r'\b(SELECT|INSERT|UPDATE|DELETE|CREATE|DROP)\b', '', message)
 
-    database.execute("INSERT INTO users (username, message) VALUES (?, ?)", (name, message))
-
+    database.insert("messages", [name, message])
+    
     print(f"Name: {name}, message: {message}")
     return """
     <html>
@@ -42,27 +42,20 @@ def post_chat():
 
 @app.route('/chat')
 def get_chat():
-    chat_history = ''
-    rows = database.execute("SELECT username, message FROM users")
-    for row in rows:
-      name = row[0]
-      message = row[1]
-      chat_history += f'<p>{name}: {message}</p>'
-    return """
-    <html>
-      <head>
-        <script>
-          setInterval(function() {{
-            location.reload();
-          }}, 1000);
-        </script>
-      </head>
-      <body>
-        <h1>Chat History</h1>
-        {}
-      </body>
-    </html>
-    """.format(chat_history)
+  try:
+    rows = database.execute("SELECT username, message FROM messages").fetchall()
+  except Exception as e:
+    app.logger.error(f"Database query failed: {e}")
+    rows = []
+
+  messages = []
+  for row in rows:
+    messages.append({"username": row[0], "message": row[1]})
+
+  # Assuming you want to render the messages on a webpage
+  return render_template_string('''<ul>{% for message in messages %}
+                     <li>{{ message.username }}: {{ message.message }}</li>
+                   {% endfor %}</ul>''', messages=messages)
 
 if __name__ == '__main__':
   setupDB()
