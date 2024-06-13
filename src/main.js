@@ -1,16 +1,17 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const multer = require('multer');
+const sharp = require('sharp');
 const path = require('path');
 
 const app = express();
 const upload = multer({ dest: 'uploads/' });
 
 let db = new sqlite3.Database('./database.db', (err) => {
-  if (err) {
-    console.error(err.message);
-  }
-  console.log('Connected to the database.');
+    if (err) {
+        console.error(err.message);
+    }
+    console.log('Connected to the database.');
 });
 
 function setupDB() {
@@ -43,7 +44,21 @@ function getMessages(callback) {
             console.error("Error fetching messages:", err.message);
             callback(null);
         } else {
-            console.log(`Fetched ${rows.length} messages.`);
+            if (rows.length === 0) {
+                console.log("No messages found in the database.");
+            }
+            callback(rows);
+        }
+    });
+}
+
+function getLastMessages(num_messages, callback) {
+    const sqlSelect = `SELECT * FROM messages ORDER BY id DESC LIMIT ${num_messages}`;
+    db.all(sqlSelect, (err, rows) => {
+        if (err) {
+            console.error("Error fetching messages:", err.message);
+            callback(null);
+        } else {
             if (rows.length === 0) {
                 console.log("No messages found in the database.");
             }
@@ -65,7 +80,7 @@ function sanitizeString(str) {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.post('/chat', upload.none(),  (req, res) => {
+app.post('/chat', upload.none(), (req, res) => {
     const { name, message } = req.body;
     insertMessage(name, message);
     console.log(`Received message from ${name}: ${message}`);
@@ -88,7 +103,6 @@ app.post('/chat', upload.none(),  (req, res) => {
 app.get('/chat', (req, res) => {
     getMessages((messages) => {
         let html = messages.map((message) => {
-            console.log(message);
             return `
                 <div>
                     <p><strong>${message.name}</strong>: ${message.message}</p>
@@ -111,6 +125,35 @@ app.get('/chat', (req, res) => {
               </body>
             </html>
           `);
+    });
+});
+
+app.get('/last-messages-img', (_, res) => {
+    getLastMessages(5, (messages) => {
+        let svg = messages.map((message, index) => {
+            return `
+                <text x="10" y="${(index * 20)+20}" font-family="Arial" font-size="16" fill="black">${message.name}: ${message.message}</text>
+            `;
+        }).join('');
+
+        const svgImage = `
+            <svg width="400" height="${messages.length * 23}" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100%" height="100%" fill="none" />
+                ${svg}
+            </svg>
+        `;
+
+        sharp(Buffer.from(svgImage))
+            .toFormat('png')
+            .toBuffer()
+            .then(data => {
+                res.type('png');
+                res.end(data, 'binary');
+            })
+            .catch(err => {
+                console.error(err);
+                res.status(500).send('Error generating image');
+            });
     });
 });
 
