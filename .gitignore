@@ -1,3 +1,4 @@
 index.html
+package-lock.json
+node_modules/
 database.db
-.vscode
