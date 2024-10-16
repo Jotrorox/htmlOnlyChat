@@ -1,7 +1,25 @@
 {
   "name": "html_only_chat",
   "version": "0.1.0",
-  "description": "A simple chat that requires the client to only use html",
+  "description": "A simple proof of concepts chat that requires the client to only use html",
+  "categories": [
+    "Chat",
+    "Education"
+  ],
+  "displayName": "HTML Only Chat",
+  "maintainers": [
+    {
+      "name": "Johannes (Jotrorox) Müller",
+      "email": "mail@jotrorx.com",
+      "url": "https://jotrorox.com"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "AGPL-3.0",
+      "url": "https://www.gnu.org/licenses/agpl-3.0.html"
+    }
+  ],
   "main": "src/main.js",
   "scripts": {
     "start": "node src/main.js",
