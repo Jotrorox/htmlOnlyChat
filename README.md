@@ -50,9 +50,9 @@ A simple proof of concept app simply made to test the creation of a chat room wi
 
 ## :sparkles: Features ##
 
-:heavy_check_mark: Feature 1\
-:heavy_check_mark: Feature 2\
-:heavy_check_mark: Feature 3
+:heavy_check_mark: Send Messages\
+:heavy_check_mark: Saving Messages in a DB\
+:heavy_check_mark: Rendered Chat output
 
 ## :rocket: Technologies ##
 
