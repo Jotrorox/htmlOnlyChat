@@ -46,13 +46,13 @@
 
 ## :dart: About ##
 
-Describe your project
+A simple proof of concept app simply made to test the creation of a chat room without using any programming language on the client. It is not made for production use but only to prove a point to my teachers.
 
 ## :sparkles: Features ##
 
-:heavy_check_mark: Feature 1;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
+:heavy_check_mark: Feature 1\
+:heavy_check_mark: Feature 2\
+:heavy_check_mark: Feature 3
 
 ## :rocket: Technologies ##
 
