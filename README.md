@@ -1,5 +1,5 @@
 <div align="center" id="top"> 
-  <img src="./.github/chat_showcase.webm" alt="Html_only_chat" />
+  <!-- <img src="./.github/chat_showcase.gif" alt="Html_only_chat" /> -->
 
   &#xa0;
 
