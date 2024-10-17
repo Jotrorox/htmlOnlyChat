@@ -27,7 +27,7 @@
 <!-- Status -->
 
 <h4 align="center"> 
-	🚧  HTML Only Chat 🚀 Under construction (Proof of Concept...  🚧
+	🚧  HTML Only Chat 🚀 Under construction (Proof of Concept) ...  🚧
 </h4> 
 
 <hr>
@@ -92,7 +92,7 @@ $ npm run start
 This project is under license from AGPL-v.3. For more details, see the [LICENSE](LICENSE) file.
 
 
-Made with :heart: by <a href="https://github.com/Jotrorox" target="_blank">Jotrorox</a>
+Made with :heart: by <a href="https://jotrorox.com" target="_blank">Jotrorox</a>
 
 &#xa0;
 
