@@ -27,7 +27,7 @@
 <!-- Status -->
 
 <h4 align="center"> 
-	🚧  HTML Only Chat 🚀 Under construction...  🚧
+	🚧  HTML Only Chat 🚀 Under construction (Proof of Concept...  🚧
 </h4> 
 
 <hr>
@@ -46,7 +46,7 @@
 
 ## :dart: About ##
 
-A simple proof of concept app simply made to test the creation of a chat room without using any programming language on the client. It is not made for production use but only to prove a point to my teachers.
+A simple proof of concept app simply made to test the creation of a chat room without using any programming language on the client. It is not made for production use but only to prove a point to my CS teacher.
 
 ## :sparkles: Features ##
 
