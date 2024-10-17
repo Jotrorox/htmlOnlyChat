@@ -52,7 +52,8 @@ A simple proof of concept app simply made to test the creation of a chat room wi
 
 :heavy_check_mark: Send Messages\
 :heavy_check_mark: Saving Messages in a DB\
-:heavy_check_mark: Rendered Chat output
+:heavy_check_mark: Rendered Chat output\
+:clock1: Full test coverage
 
 ## :rocket: Technologies ##
 
