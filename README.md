@@ -27,7 +27,7 @@
 <!-- Status -->
 
 <h4 align="center"> 
-	🚧  HTML Only Chat 🚀 Under construction (Proof of Concept) ...  🚧
+	🚧  HTML Only Chat 🚀 Archived ...  🚧
 </h4> 
 
 <hr>
